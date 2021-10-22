@@ -26,7 +26,7 @@ const rotatingTriangle = {
     y: 30,
     rotation: 0,
     rotationVelocity: 0,
-    rotationSpeed: 1,
+    rotationSpeed: 3,
 };
 
 const Canvas = () => {
@@ -60,7 +60,7 @@ const Canvas = () => {
     }, []);
 
     const handleKeyDown = (event) => {
-        console.log(event);
+        //console.log(event);
         if (event.code === 'ArrowRight') {
             rotatingTriangle.rotationVelocity += rotatingTriangle.rotationSpeed;
         }
@@ -69,7 +69,20 @@ const Canvas = () => {
         }
     };
 
-    return <canvas ref={canvasRef} tabIndex={0} onKeyDown={handleKeyDown} />;
+    const handleKeyUp = (event) => {
+        if (event.code === 'ArrowRight' || event.code === 'ArrowLeft') {
+            rotatingTriangle.rotationVelocity *= 0.2;
+        }
+    };
+
+    return (
+        <canvas
+            ref={canvasRef}
+            tabIndex={0}
+            onKeyDown={handleKeyDown}
+            onKeyUp={handleKeyUp}
+        />
+    );
 };
 
 export default Canvas;
