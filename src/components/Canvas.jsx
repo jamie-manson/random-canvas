@@ -25,6 +25,7 @@ const rotatingTriangle = {
     x: 50,
     y: 30,
     rotation: 0,
+    rotationVelocity: 0,
     rotationSpeed: 1,
 };
 
@@ -35,10 +36,11 @@ const Canvas = () => {
         const canvas = canvasRef.current;
         const context = canvas.getContext('2d');
         let animationFrameId;
-
+        canvasRef.current.focus();
         //Our draw came here
         const render = () => {
             context.clearRect(0, 0, canvas.width, canvas.height);
+
             drawBall(context, ballObj);
             drawTriangle(context, rotatingTriangle);
             drawSquare(context, squareObj);
@@ -57,7 +59,17 @@ const Canvas = () => {
         };
     }, []);
 
-    return <canvas ref={canvasRef} />;
+    const handleKeyDown = (event) => {
+        console.log(event);
+        if (event.code === 'ArrowRight') {
+            rotatingTriangle.rotationVelocity += rotatingTriangle.rotationSpeed;
+        }
+        if (event.code === 'ArrowLeft') {
+            rotatingTriangle.rotationVelocity -= rotatingTriangle.rotationSpeed;
+        }
+    };
+
+    return <canvas ref={canvasRef} tabIndex={0} onKeyDown={handleKeyDown} />;
 };
 
 export default Canvas;

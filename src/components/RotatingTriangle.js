@@ -18,9 +18,12 @@ const draw = (ctx, triangleObj) => {
 };
 
 export function drawTriangle(ctx, triangleObj) {
-    draw(ctx, triangleObj);
-    triangleObj.rotation += triangleObj.rotationSpeed;
+    triangleObj.rotation += triangleObj.rotationVelocity;
     if (triangleObj.rotation >= 360) {
         triangleObj.rotation -= 360;
     }
+    if (triangleObj.rotation < 0) {
+        triangleObj.rotation += 360;
+    }
+    draw(ctx, triangleObj);
 }
