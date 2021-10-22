@@ -27,6 +27,7 @@ const rotatingTriangle = {
     rotation: 0,
     rotationVelocity: 0,
     rotationSpeed: 3,
+    velocity: 0,
 };
 
 const Canvas = () => {
@@ -35,11 +36,16 @@ const Canvas = () => {
     useEffect(() => {
         const canvas = canvasRef.current;
         const context = canvas.getContext('2d');
+        rotatingTriangle.x = canvas.width / 2;
+        rotatingTriangle.y = canvas.height / 2;
+
         let animationFrameId;
         canvasRef.current.focus();
         //Our draw came here
         const render = () => {
             context.clearRect(0, 0, canvas.width, canvas.height);
+            context.fillStyle = 'black';
+            context.fillRect(0, 0, canvas.width, canvas.height);
 
             drawBall(context, ballObj);
             drawTriangle(context, rotatingTriangle);
@@ -81,6 +87,8 @@ const Canvas = () => {
             tabIndex={0}
             onKeyDown={handleKeyDown}
             onKeyUp={handleKeyUp}
+            width={800}
+            height={500}
         />
     );
 };
