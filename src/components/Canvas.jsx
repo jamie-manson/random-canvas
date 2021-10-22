@@ -4,6 +4,8 @@ import { drawSquare } from './Square';
 import wallCollision from '../utils/wallCollision';
 import squareCollision from '../utils/squareCollision';
 import { drawTriangle } from './RotatingTriangle';
+import createBullet from './Bullet';
+import bulletWallCollision from '../utils/bulletWallCollision';
 
 const ballObj = {
     x: 50,
@@ -29,6 +31,7 @@ const rotatingTriangle = {
     rotationSpeed: 3,
     velocity: 0,
 };
+let bullets = [];
 
 const Canvas = () => {
     const canvasRef = useRef(null);
@@ -51,6 +54,18 @@ const Canvas = () => {
             drawTriangle(context, rotatingTriangle);
             drawSquare(context, squareObj);
             wallCollision(ballObj, canvas);
+
+            if (bullets) {
+                // see if bullet has hit the wall, if it has remove it
+                bullets = bullets.filter(
+                    (bullet) => !bulletWallCollision(bullet, canvas)
+                );
+                // draw the remaining bullets
+                if (bullets) {
+                    bullets.forEach((bullet) => drawBall(context, bullet));
+                }
+            }
+
             if (squareCollision(ballObj, squareObj)) {
                 squareObj.color = 'blue';
             } else {
@@ -66,12 +81,17 @@ const Canvas = () => {
     }, []);
 
     const handleKeyDown = (event) => {
-        //console.log(event);
+        console.log(event);
         if (event.code === 'ArrowRight') {
             rotatingTriangle.rotationVelocity += rotatingTriangle.rotationSpeed;
         }
         if (event.code === 'ArrowLeft') {
             rotatingTriangle.rotationVelocity -= rotatingTriangle.rotationSpeed;
+        }
+
+        if (event.code === 'Space') {
+            bullets.push(createBullet(rotatingTriangle));
+            console.log(bullets);
         }
     };
 
