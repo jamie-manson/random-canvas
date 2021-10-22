@@ -3,6 +3,7 @@ import { drawBall } from './Ball';
 import { drawSquare } from './Square';
 import wallCollision from '../utils/wallCollision';
 import squareCollision from '../utils/squareCollision';
+import { drawTriangle } from './RotatingTriangle';
 
 const ballObj = {
     x: 50,
@@ -20,6 +21,13 @@ const squareObj = {
     color: 'red',
 };
 
+const rotatingTriangle = {
+    x: 50,
+    y: 30,
+    rotation: 0,
+    rotationSpeed: 1,
+};
+
 const Canvas = () => {
     const canvasRef = useRef(null);
 
@@ -32,6 +40,7 @@ const Canvas = () => {
         const render = () => {
             context.clearRect(0, 0, canvas.width, canvas.height);
             drawBall(context, ballObj);
+            drawTriangle(context, rotatingTriangle);
             drawSquare(context, squareObj);
             wallCollision(ballObj, canvas);
             if (squareCollision(ballObj, squareObj)) {
