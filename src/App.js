@@ -1,25 +1,20 @@
-import logo from './logo.svg';
 import './App.css';
+import Canvas from './components/Canvas';
+
+import { useState } from 'react';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [canvasActive, setCanvasActive] = useState(true);
+
+    const handleClick = () => {
+        setCanvasActive(!canvasActive);
+    };
+    return (
+        <div className="App">
+            {canvasActive ? <Canvas /> : <p>Inactive</p>}
+            <button onClick={handleClick}>Press me!</button>
+        </div>
+    );
 }
 
 export default App;
