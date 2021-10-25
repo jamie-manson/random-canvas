@@ -100,7 +100,7 @@ const Canvas = () => {
 
         if (event.code === 'Space') {
             bullets.current.push(createBullet(rotatingTriangle.current));
-            console.log(bullets);
+            console.log(bullets.current);
         }
     };
 

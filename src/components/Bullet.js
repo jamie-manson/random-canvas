@@ -8,8 +8,6 @@ export default function createBullet(rotatingTriangle) {
         radius: 1,
         color: 'white',
     };
-
-    console.log(rotatingTriangle);
     const bulletSpeed = 2;
     // determine the x and y velocities
     let angle = rotatingTriangle.rotation - 90;
