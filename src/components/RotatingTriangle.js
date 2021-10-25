@@ -18,15 +18,18 @@ const draw = (ctx, triangleObj) => {
 };
 
 export function drawTriangle(ctx, triangleObj) {
-    triangleObj.rotation += Math.min(
+    // get a copy and then return the modded copy
+    const newObject = { ...triangleObj };
+    newObject.rotation += Math.min(
         Math.max(-5, triangleObj.rotationVelocity),
         5
     );
-    if (triangleObj.rotation >= 360) {
-        triangleObj.rotation -= 360;
+    if (newObject.rotation >= 360) {
+        newObject.rotation -= 360;
     }
-    if (triangleObj.rotation < 0) {
-        triangleObj.rotation += 360;
+    if (newObject.rotation < 0) {
+        newObject.rotation += 360;
     }
-    draw(ctx, triangleObj);
+    draw(ctx, newObject);
+    return newObject;
 }

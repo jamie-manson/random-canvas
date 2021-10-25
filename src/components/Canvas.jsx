@@ -23,7 +23,7 @@ const squareObj = {
     color: 'red',
 };
 
-const rotatingTriangle = {
+const defaultTriangle = {
     x: 50,
     y: 30,
     rotation: 0,
@@ -31,19 +31,21 @@ const rotatingTriangle = {
     rotationSpeed: 3,
     velocity: 0,
 };
-let bullets = [];
 
 const Canvas = () => {
+    // useRef to keep track of components without having to rerender them
     const canvasRef = useRef(null);
+    const rotatingTriangle = useRef(defaultTriangle);
+    const bullets = useRef([]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
         const context = canvas.getContext('2d');
-        rotatingTriangle.x = canvas.width / 2;
-        rotatingTriangle.y = canvas.height / 2;
+        rotatingTriangle.current.x = canvas.width / 2;
+        rotatingTriangle.current.y = canvas.height / 2;
 
         let animationFrameId;
-        canvasRef.current.focus();
+        canvas.focus();
         //Our draw came here
         const render = () => {
             context.clearRect(0, 0, canvas.width, canvas.height);
@@ -51,18 +53,23 @@ const Canvas = () => {
             context.fillRect(0, 0, canvas.width, canvas.height);
 
             drawBall(context, ballObj);
-            drawTriangle(context, rotatingTriangle);
+            rotatingTriangle.current = drawTriangle(
+                context,
+                rotatingTriangle.current
+            );
             drawSquare(context, squareObj);
             wallCollision(ballObj, canvas);
 
-            if (bullets) {
+            if (bullets.current) {
                 // see if bullet has hit the wall, if it has remove it
-                bullets = bullets.filter(
+                bullets.current = bullets.current.filter(
                     (bullet) => !bulletWallCollision(bullet, canvas)
                 );
                 // draw the remaining bullets
-                if (bullets) {
-                    bullets.forEach((bullet) => drawBall(context, bullet));
+                if (bullets.current) {
+                    bullets.current.forEach((bullet) =>
+                        drawBall(context, bullet)
+                    );
                 }
             }
 
@@ -83,21 +90,23 @@ const Canvas = () => {
     const handleKeyDown = (event) => {
         console.log(event);
         if (event.code === 'ArrowRight') {
-            rotatingTriangle.rotationVelocity += rotatingTriangle.rotationSpeed;
+            rotatingTriangle.current.rotationVelocity +=
+                rotatingTriangle.current.rotationSpeed;
         }
         if (event.code === 'ArrowLeft') {
-            rotatingTriangle.rotationVelocity -= rotatingTriangle.rotationSpeed;
+            rotatingTriangle.current.rotationVelocity -=
+                rotatingTriangle.current.rotationSpeed;
         }
 
         if (event.code === 'Space') {
-            bullets.push(createBullet(rotatingTriangle));
+            bullets.current.push(createBullet(rotatingTriangle.current));
             console.log(bullets);
         }
     };
 
     const handleKeyUp = (event) => {
         if (event.code === 'ArrowRight' || event.code === 'ArrowLeft') {
-            rotatingTriangle.rotationVelocity *= 0.2;
+            rotatingTriangle.current.rotationVelocity *= 0.2;
         }
     };
 
